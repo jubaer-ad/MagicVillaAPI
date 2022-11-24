@@ -1,6 +1,7 @@
 ﻿using MagicVillaAPI.Data;
 using MagicVillaAPI.Models;
 using MagicVillaAPI.Models.Dtos;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVillaAPI.Controllers
@@ -85,7 +86,27 @@ namespace MagicVillaAPI.Controllers
         }
 
 
-        //[HttpPatch]
+
+        /*
+         * For Patch support we need to install two more NuGet with same .Net core version
+         * 1. Microsoft.AspNetCore.JsonPatch
+         * 2. Microsoft.AspNetCore.Mvc.NewtonsoftJson
+         * 
+         * For more information refer to https://jsonpatch.com/
+         * */
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
+        public IActionResult UpdatePartialVilla(int id, JsonPatchDocument<VillaDTO> patchDTO)
+        {
+            if (patchDTO == null || id == 0) return BadRequest();
+            var villa = VillaStore.villaList.FirstOrDefault(v => v.Id == id);
+            if (villa == null) return NotFound();
+            patchDTO.ApplyTo(villa, ModelState);
+            if (!ModelState.IsValid) return BadRequest();
+            return NoContent();
+        }
 
     }
 }
