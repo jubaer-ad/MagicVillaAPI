@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using MagicVillaAPI.DBContext;
+using MagicVillaAPI.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
 .AddControllers(opt =>
 {
-    opt.ReturnHttpNotAcceptable=true;
+    //opt.ReturnHttpNotAcceptable=true;
 })
 .AddNewtonsoftJson()
 .AddXmlDataContractSerializerFormatters();
@@ -17,9 +18,19 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Adding Custom logger to container for dependency injection
+builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
+
+// Adding Database
+builder.Services.AddDbContext<VillaDBContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+});
+
 //builder.Services.AddDbContext<VillaDBContext>(opt => opt.UseInMemoryDatabase("VillaDB"));
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

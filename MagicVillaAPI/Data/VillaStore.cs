@@ -2,6 +2,11 @@
 
 namespace MagicVillaAPI.Data
 {
+
+    /*
+     * Class to provide data initially instead of using a database
+     * 
+     */
     public class VillaStore
     {
         public static List<VillaDTO> villaList = new List<VillaDTO>
