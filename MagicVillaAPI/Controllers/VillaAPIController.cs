@@ -54,7 +54,7 @@ namespace MagicVillaAPI.Controllers
             _logger.Log("Getting all Villas", "inf");
             // return Ok(VillaStore.villaList);
             IEnumerable<Villa> villaList = await _db.Villas.ToListAsync();
-            return Ok(_mapper.Map<VillaDTO>(villaList));
+            return Ok(_mapper.Map<List<VillaDTO>>(villaList));
         }
 
         [HttpGet("{id:int}", Name = "GetVilla")]
@@ -134,7 +134,7 @@ namespace MagicVillaAPI.Controllers
             Villa? existingVilla = await _db.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id);
             if (existingVilla != null)
             {
-                Villa model = _mapper.Map<Villa>(existingVilla);
+                Villa model = _mapper.Map<Villa>(villaUpdateDTO);
                 model.CreatedAt = existingVilla.CreatedAt;
                 model.UpdatedAt = DateTime.Now;
 
