@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MagicVillaAPI.DBContext;
 using MagicVillaAPI.Logging;
 using MagicVillaAPI;
+using MagicVillaAPI.Repository.IRepository;
+using MagicVillaAPI.Repository.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 // Adding Custom logger to container for dependency injection
 builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
+builder.Services.AddScoped<IVillaRepository, VillaRepositoryImpl>();
 
 // Adding Database
 builder.Services.AddDbContext<VillaDBContext>(opt =>
