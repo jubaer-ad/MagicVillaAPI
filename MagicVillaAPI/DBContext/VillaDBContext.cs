@@ -9,10 +9,7 @@ namespace MagicVillaAPI.DBContext
         public DbSet<Villa> Villas { get; set; }
 
         public VillaDBContext(DbContextOptions<VillaDBContext> opt)
-            : base(opt)
-        {
-            Console.WriteLine("In VillaDbContext.cs");
-        }
+            : base(opt) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

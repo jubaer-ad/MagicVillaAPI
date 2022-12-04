@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MagicVillaAPI.DBContext;
 using MagicVillaAPI.Logging;
+using MagicVillaAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,8 @@ builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
 builder.Services.AddDbContext<VillaDBContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
-    Console.WriteLine("In Program.cs");
 });
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 //builder.Services.AddDbContext<VillaDBContext>(opt => opt.UseInMemoryDatabase("VillaDB"));
 
