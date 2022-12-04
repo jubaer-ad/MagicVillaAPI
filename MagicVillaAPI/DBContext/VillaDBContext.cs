@@ -9,12 +9,15 @@ namespace MagicVillaAPI.DBContext
         public DbSet<Villa> Villas { get; set; }
 
         public VillaDBContext(DbContextOptions<VillaDBContext> opt)
-            : base(opt) { }
+            : base(opt)
+        {
+            Console.WriteLine("In VillaDbContext.cs");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
-                new Villa()
+                new Villa
                 {
                     Id = 1,
                     Name = "A Villa",
@@ -26,7 +29,7 @@ namespace MagicVillaAPI.DBContext
                     Sqft = 750,
                     CreatedAt = DateTime.Now
                 },
-                new Villa()
+                new Villa
                 {
                     Id = 2,
                     Name = "B Villa",
@@ -35,6 +38,18 @@ namespace MagicVillaAPI.DBContext
                     Occupency = 4,
                     Rate = 8,
                     Amenity = "Test002 Amenity",
+                    Sqft = 1050,
+                    CreatedAt = DateTime.Now
+                },
+                new Villa
+                {
+                    Id = 10,
+                    Name = "grrrrrrrrrrr",
+                    Details = "hrrrrrrrrrrrrrrr",
+                    ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    Occupency = 4,
+                    Rate = 8,
+                    Amenity = "drrrrrrrrrrrrrrrrrrrrrrr",
                     Sqft = 1050,
                     CreatedAt = DateTime.Now
                 }

@@ -25,6 +25,7 @@ builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
 builder.Services.AddDbContext<VillaDBContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+    Console.WriteLine("In Program.cs");
 });
 
 //builder.Services.AddDbContext<VillaDBContext>(opt => opt.UseInMemoryDatabase("VillaDB"));
