@@ -44,7 +44,6 @@ namespace MagicVillaAPI.Controllers
             this._mapper = mapper;
         }
 
-
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -75,7 +74,6 @@ namespace MagicVillaAPI.Controllers
             return Ok(_mapper.Map<VillaDTO>(villa));
         }
 
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -91,24 +89,10 @@ namespace MagicVillaAPI.Controllers
                 return BadRequest(ModelState);
             }
             if (villaCreateDTO == null) return BadRequest();
-            //if (villa.Id > 0) return StatusCode(StatusCodes.Status500InternalServerError);
-            //villa.Id = VillaStore.villaList.OrderByDescending(v => v.Id).FirstOrDefault().Id + 1;
-            //VillaStore.villaList.Add(villa);
 
             Villa model = _mapper.Map<Villa>(villaCreateDTO);
             model.CreatedAt = DateTime.Now;
 
-            //Villa model = new Villa()
-            //{
-            //    Name = villaCreateDTO.Name,
-            //    Details = villaCreateDTO.Details,
-            //    Rate = villaCreateDTO.Rate,
-            //    Occupency = villaCreateDTO.Occupency,
-            //    Sqft = villaCreateDTO.Sqft,
-            //    CreatedAt = DateTime.Now,
-            //    ImageUrl = villaCreateDTO.ImageUrl,
-            //    Amenity = villaCreateDTO.Amenity
-            //};
             await _db.AddAsync(model);
             await _db.SaveChangesAsync();
             //var test = _db.Villas.FromSql("");
@@ -126,11 +110,6 @@ namespace MagicVillaAPI.Controllers
         {
             if (villaUpdateDTO == null || id != villaUpdateDTO.Id) return BadRequest();
 
-            //var villa = VillaStore.villaList.FirstOrDefault(v => v.Id == id);
-            //if (villa == null) return NotFound();
-            //villa.Name = villaDTO.Name;
-            //villa.Occupency = villaDTO.Occupency;
-            //villa.Sqft= villaDTO.Sqft;
             Villa? existingVilla = await _db.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id);
             if (existingVilla != null)
             {
@@ -138,27 +117,12 @@ namespace MagicVillaAPI.Controllers
                 model.CreatedAt = existingVilla.CreatedAt;
                 model.UpdatedAt = DateTime.Now;
 
-                //Villa model = new Villa()
-                //{
-                //    Id = villaUpdateDTO.Id,
-                //    Name = villaUpdateDTO.Name,
-                //    Details = villaUpdateDTO.Details,
-                //    Rate = villaUpdateDTO.Rate,
-                //    Occupency = villaUpdateDTO.Occupency,
-                //    Sqft = villaUpdateDTO.Sqft,
-                //    ImageUrl = villaUpdateDTO.ImageUrl,
-                //    Amenity = villaUpdateDTO.Amenity,
-                //    CreatedAt = existingVilla.CreatedAt,
-                //    UpdatedAt = DateTime.Now
-                //};
                 _db.Villas.Update(model);
                 await _db.SaveChangesAsync();
                 return CreatedAtRoute("GetVilla", new { id = id }, model);
             }
             return NotFound();
         }
-
-
 
         /*
          * For Patch support we need to install two more NuGet with same .Net core version
@@ -179,17 +143,6 @@ namespace MagicVillaAPI.Controllers
             if (villa == null) return NotFound();
             VillaUpdateDTO villaUpdateDTO = _mapper.Map<VillaUpdateDTO>(villa);
 
-            //VillaUpdateDTO villaUpdateDTO = new()
-            //{
-            //    Id = villa.Id,
-            //    Name = villa.Name,
-            //    Details = villa.Details,
-            //    Rate = villa.Rate,
-            //    Occupency = villa.Occupency,
-            //    Sqft = villa.Sqft,
-            //    ImageUrl = villa.ImageUrl,
-            //    Amenity = villa.Amenity
-            //};
             patchDTO.ApplyTo(villaUpdateDTO, ModelState);
 
             if (!ModelState.IsValid) return BadRequest();
@@ -197,24 +150,10 @@ namespace MagicVillaAPI.Controllers
             model.CreatedAt = villa.CreatedAt;
             model.UpdatedAt = DateTime.Now;
 
-            //Villa model = new Villa()
-            //{
-            //    Id = villaUpdateDTO.Id,
-            //    Name = villaUpdateDTO.Name,
-            //    Details = villaUpdateDTO.Details,
-            //    Rate = villaUpdateDTO.Rate,
-            //    Occupency = villaUpdateDTO.Occupency,
-            //    Sqft = villaUpdateDTO.Sqft,
-            //    ImageUrl = villaUpdateDTO.ImageUrl,
-            //    Amenity = villaUpdateDTO.Amenity,
-            //    CreatedAt = villa.CreatedAt,
-            //    UpdatedAt = DateTime.Now
-            //};
             _db.Villas.Update(model);
             await _db.SaveChangesAsync();
             return NoContent();
         }
-
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
