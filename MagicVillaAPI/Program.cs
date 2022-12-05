@@ -26,7 +26,7 @@ builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
 builder.Services.AddScoped<IVillaRepository, VillaRepositoryImpl>();
 
 // Adding Database
-builder.Services.AddDbContext<VillaDBContext>(opt =>
+builder.Services.AddDbContext<ApplicationDBContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });

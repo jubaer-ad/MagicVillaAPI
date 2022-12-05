@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagicVillaAPI.Migrations
 {
-    [DbContext(typeof(VillaDBContext))]
-    [Migration("20221128042027_AddMoreData")]
-    partial class AddMoreData
+    [DbContext(typeof(ApplicationDBContext))]
+    [Migration("20221205113940_gentype1.0")]
+    partial class gentype10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace MagicVillaAPI.Migrations
                     b.Property<int>("Sqft")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateddAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -73,40 +73,14 @@ namespace MagicVillaAPI.Migrations
                         {
                             Id = 1,
                             Amenity = "Test Amenity",
-                            CreatedAt = new DateTime(2022, 11, 28, 10, 20, 27, 72, DateTimeKind.Local).AddTicks(7615),
+                            CreatedAt = new DateTime(2022, 12, 5, 17, 39, 40, 531, DateTimeKind.Local).AddTicks(9195),
                             Details = "Test details",
                             ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "A Villa",
                             Occupency = 2,
                             Rate = 5.0,
                             Sqft = 750,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amenity = "Test002 Amenity",
-                            CreatedAt = new DateTime(2022, 11, 28, 10, 20, 27, 72, DateTimeKind.Local).AddTicks(7625),
-                            Details = "Test002 details",
-                            ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            Name = "B Villa",
-                            Occupency = 4,
-                            Rate = 8.0,
-                            Sqft = 1050,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Amenity = "drrrrrrrrrrrrrrrrrrrrrrr",
-                            CreatedAt = new DateTime(2022, 11, 28, 10, 20, 27, 72, DateTimeKind.Local).AddTicks(7627),
-                            Details = "hrrrrrrrrrrrrrrr",
-                            ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            Name = "grrrrrrrrrrr",
-                            Occupency = 4,
-                            Rate = 8.0,
-                            Sqft = 1050,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 #pragma warning restore 612, 618

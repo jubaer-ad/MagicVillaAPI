@@ -121,7 +121,7 @@ namespace MagicVillaAPI.Controllers
 
                 return CreatedAtRoute("GetVilla", new { id = id }, model);
             }
-            return NotFound();
+            return BadRequest("Record by Id not found.");
         }
 
         /*

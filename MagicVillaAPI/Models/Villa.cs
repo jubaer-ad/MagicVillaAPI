@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagicVillaAPI.Models
 {
-    public class Villa
+    public class Villa : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,5 +17,10 @@ namespace MagicVillaAPI.Models
         public string Amenity { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        //public DateTime getCreatedAt()
+        //{
+        //    return this.CreatedAt;
+        //}
     }
 }
