@@ -70,7 +70,7 @@ namespace MagicVillaAPI.Migrations
                         {
                             Id = 1,
                             Amenity = "Test Amenity",
-                            CreatedAt = new DateTime(2022, 12, 5, 17, 39, 40, 531, DateTimeKind.Local).AddTicks(9195),
+                            CreatedAt = new DateTime(2022, 12, 6, 10, 25, 11, 336, DateTimeKind.Local).AddTicks(3628),
                             Details = "Test details",
                             ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "A Villa",
