@@ -70,13 +70,61 @@ namespace MagicVillaAPI.Migrations
                         {
                             Id = 1,
                             Amenity = "Test Amenity",
-                            CreatedAt = new DateTime(2022, 12, 6, 10, 25, 11, 336, DateTimeKind.Local).AddTicks(3628),
+                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8693),
                             Details = "Test details",
                             ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "A Villa",
                             Occupency = 2,
                             Rate = 5.0,
                             Sqft = 750,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amenity = "Test Amenity",
+                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8709),
+                            Details = "Test details",
+                            ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                            Name = "B Villa",
+                            Occupency = 3,
+                            Rate = 6.0,
+                            Sqft = 850,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("MagicVillaAPI.Models.VillaNumber", b =>
+                {
+                    b.Property<int>("VillaNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SpecialDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("VillaNo");
+
+                    b.ToTable("VillaNumbers");
+
+                    b.HasData(
+                        new
+                        {
+                            VillaNo = 101,
+                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8804),
+                            SpecialDetails = "Exotic pool attached.",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            VillaNo = 102,
+                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8805),
+                            SpecialDetails = "360 Sky view.",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

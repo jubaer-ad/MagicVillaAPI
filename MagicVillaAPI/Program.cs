@@ -24,11 +24,13 @@ builder.Services.AddSwaggerGen();
 // Adding Custom logger to container for dependency injection
 builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
 builder.Services.AddScoped<IVillaRepository, VillaRepositoryImpl>();
+builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepositoryImpl>();
 
 // Adding Database
 builder.Services.AddDbContext<ApplicationDBContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+    opt.EnableSensitiveDataLogging();
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
