@@ -19,13 +19,15 @@ namespace MagicVillaAPI.Controllers
         private readonly ILoggingCustom _logger;
         private readonly IMapper _mapper;
         protected APIResponse _response;
+        private readonly IVillaRepository _villaRepository;
 
-        public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, ILoggingCustom logger, IMapper _mapper)
+        public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, ILoggingCustom logger, IMapper _mapper, IVillaRepository villaRepository)
         {
             this._dbVillaNumber = dbVillaNumber;
             this._logger = logger;
             this._response = new();
             this._mapper = _mapper;
+            this._villaRepository = villaRepository;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,6 +42,13 @@ namespace MagicVillaAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = new List<string> { "Villa Number already exists!" };
+                    _response.IsSucces = false;
+                    return BadRequest(_response);
+                }
+                if (await _villaRepository.GetAsync(v => v.Id == villaNumberCreateDTO.VillaId) == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string> { "Villa doesn't exist!" };
                     _response.IsSucces = false;
                     return BadRequest(_response);
                 }
