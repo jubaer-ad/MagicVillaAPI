@@ -7,7 +7,6 @@ namespace MagicVillaAPI.Models.Dtos
     {
         [Required]
         [NotNull]
-        [MaxLength(4)]
         [Key]
         public int VillaNo { get; set; }
         public string? SpecialDetails { get; set; }
