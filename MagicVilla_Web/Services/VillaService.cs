@@ -28,6 +28,7 @@ namespace MagicVilla_Web.Services
 
         public Task<T> GetAllAsync<T>()
         {
+            string Url2 = villaUrl + "/api/VillaAPI";
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
