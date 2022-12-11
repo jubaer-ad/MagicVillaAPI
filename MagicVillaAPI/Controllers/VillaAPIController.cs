@@ -54,7 +54,9 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        [Authorize(Roles ="admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[Authorize(Roles ="admin")]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             _logger.Log("Getting all Villas", "inf");
@@ -77,7 +79,9 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VillaDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[Authorize]
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try
@@ -117,7 +121,8 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[Authorize]
 		public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO villaCreateDTO)
         {
@@ -235,8 +240,10 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id:int}", Name = "DeleteVilla")]
-		[Authorize(Roles = "admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[HttpDelete("{id:int}", Name = "DeleteVilla")]
+		[Authorize(Roles = "anubis")]
 		public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
