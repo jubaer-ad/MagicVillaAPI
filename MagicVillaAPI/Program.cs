@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
 builder.Services.AddScoped<IVillaRepository, VillaRepositoryImpl>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepositoryImpl>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Adding Database
 builder.Services.AddDbContext<ApplicationDBContext>(opt =>
