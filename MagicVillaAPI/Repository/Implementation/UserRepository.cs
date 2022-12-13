@@ -47,7 +47,7 @@ namespace MagicVillaAPI.Repository.Implementation
 					new Claim(ClaimTypes.Role, user.Role),
 					new Claim("issueTime", DateTime.Now.ToString())
 				}),
-				Expires = DateTime.UtcNow.AddMinutes(2),
+				Expires = DateTime.UtcNow.AddHours(.9),
 				SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 			var token = tokenHandler.CreateToken(tokenDescriptor);

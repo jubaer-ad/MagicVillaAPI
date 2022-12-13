@@ -4,15 +4,18 @@ using MagicVillaAPI.Logging;
 using MagicVillaAPI.Models;
 using MagicVillaAPI.Models.Dtos;
 using MagicVillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Data;
 using System.Net;
 
-namespace MagicVillaAPI.Controllers
+namespace MagicVillaAPI.Controllers.v1
 {
-    [Route("api/VillaNumberAPI")]
+    [Route("api/v{version:apiVersion}/VillaNumberAPI")]
     [ApiController]
+    [ApiVersion("1.0", Deprecated = true)]
     public class VillaNumberAPIController : ControllerBase
     {
         private readonly IVillaNumberRepository _dbVillaNumber;
@@ -23,17 +26,18 @@ namespace MagicVillaAPI.Controllers
 
         public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, ILoggingCustom logger, IMapper _mapper, IVillaRepository villaRepository)
         {
-            this._dbVillaNumber = dbVillaNumber;
-            this._logger = logger;
-            this._response = new();
+            _dbVillaNumber = dbVillaNumber;
+            _logger = logger;
+            _response = new();
             this._mapper = _mapper;
-            this._villaRepository = villaRepository;
+            _villaRepository = villaRepository;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
+        [Authorize(Roles = "aladin")]
         public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNumberCreateDTO villaNumberCreateDTO)
         {
             try
@@ -91,6 +95,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
+        //[MapToApiVersion("1.0")]
         public async Task<ActionResult<APIResponse>> GetVillaNumbers()
         {
             try
@@ -108,7 +113,6 @@ namespace MagicVillaAPI.Controllers
             }
             return BadRequest(_response);
         }
-
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -151,6 +155,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPut("{villaNo:int}", Name = "UpdateVillaNumber")]
+        [Authorize(Roles = "aladin")]
         public async Task<ActionResult<APIResponse>> UpdateVillaNumber([FromBody] VillaNumberUpdateDTO villaNumberUpdateDTO, int villaNo)
         {
             try
@@ -171,7 +176,7 @@ namespace MagicVillaAPI.Controllers
 
                     _response.StatusCode = HttpStatusCode.Created;
                     _response.Result = villaNumber;
-                    return CreatedAtAction("GetVillaNumber", new { villaNo = villaNo }, _response);
+                    return CreatedAtAction("GetVillaNumber", new { villaNo }, _response);
                 }
             }
             catch (Exception ex)
@@ -190,6 +195,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{villaNo:int}", Name = "DeleteVillaNumber")]
+        [Authorize(Roles = "anubis")]
         public async Task<ActionResult<APIResponse>> DeleteVillaNumber(int villaNo)
         {
             try
@@ -225,6 +231,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPatch]
+        [Authorize(Roles = "aladin")]
         public async Task<ActionResult<APIResponse>> PartialUpdate(int villaNo, JsonPatchDocument<VillaNumberUpdateDTO> patch)
         {
             try

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVillaAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20221206125109_twoTbl")]
-    partial class twoTbl
+    [Migration("20221212070908_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,35 @@ namespace MagicVillaAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MagicVillaAPI.Models.LocalUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocalUsers");
+                });
 
             modelBuilder.Entity("MagicVillaAPI.Models.Villa", b =>
                 {
@@ -67,34 +96,6 @@ namespace MagicVillaAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Villas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amenity = "Test Amenity",
-                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8693),
-                            Details = "Test details",
-                            ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            Name = "A Villa",
-                            Occupency = 2,
-                            Rate = 5.0,
-                            Sqft = 750,
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amenity = "Test Amenity",
-                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8709),
-                            Details = "Test details",
-                            ImageUrl = "https://images.pexels.com/photos/7583935/pexels-photo-7583935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            Name = "B Villa",
-                            Occupency = 3,
-                            Rate = 6.0,
-                            Sqft = 850,
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("MagicVillaAPI.Models.VillaNumber", b =>
@@ -111,25 +112,25 @@ namespace MagicVillaAPI.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("VillaId")
+                        .HasColumnType("int");
+
                     b.HasKey("VillaNo");
 
-                    b.ToTable("VillaNumbers");
+                    b.HasIndex("VillaId");
 
-                    b.HasData(
-                        new
-                        {
-                            VillaNo = 101,
-                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8804),
-                            SpecialDetails = "Exotic pool attached.",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            VillaNo = 102,
-                            CreatedAt = new DateTime(2022, 12, 6, 18, 51, 9, 134, DateTimeKind.Local).AddTicks(8805),
-                            SpecialDetails = "360 Sky view.",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("VillaNumbers");
+                });
+
+            modelBuilder.Entity("MagicVillaAPI.Models.VillaNumber", b =>
+                {
+                    b.HasOne("MagicVillaAPI.Models.Villa", "Villa")
+                        .WithMany()
+                        .HasForeignKey("VillaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Villa");
                 });
 #pragma warning restore 612, 618
         }

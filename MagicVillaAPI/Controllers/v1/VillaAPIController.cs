@@ -12,10 +12,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace MagicVillaAPI.Controllers
+namespace MagicVillaAPI.Controllers.v1
 {
     //[Route("api/[controller]")]
-    [Route("api/VillaAPI")]
+    [Route("api/v{version:apiVersion}/VillaAPI")]
+    [ApiVersion("1.0")]
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
@@ -32,7 +33,7 @@ namespace MagicVillaAPI.Controllers
 
         */
 
-        
+
         private readonly IVillaRepository _dbVilla;
 
         /*
@@ -44,19 +45,18 @@ namespace MagicVillaAPI.Controllers
 
         public VillaAPIController(ILoggingCustom logger, IVillaRepository dbVilla, IMapper mapper)
         {
-            this._logger = logger;
-            this._dbVilla = dbVilla;
-            this._mapper = mapper;
-            this._response = new();
+            _logger = logger;
+            _dbVilla = dbVilla;
+            _mapper = mapper;
+            _response = new();
         }
 
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status403Forbidden)]
-		[Authorize(Roles ="admin")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             _logger.Log("Getting all Villas", "inf");
@@ -67,7 +67,7 @@ namespace MagicVillaAPI.Controllers
                 _response.IsSucces = true;
                 return Ok(_response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _response.IsSucces = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
@@ -79,9 +79,8 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VillaDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status403Forbidden)]
-		[Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try
@@ -114,17 +113,17 @@ namespace MagicVillaAPI.Controllers
             }
             return _response;
 
-            
+
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status403Forbidden)]
-		[Authorize]
-		public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO villaCreateDTO)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Roles = "aladin")]
+        public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO villaCreateDTO)
         {
             try
             {
@@ -170,6 +169,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPut("{id:int}", Name = "UpdateVilla")]
+        [Authorize(Roles = "aladin")]
         public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDTO villaUpdateDTO)
         {
             try
@@ -195,7 +195,7 @@ namespace MagicVillaAPI.Controllers
                     _response.IsSucces = true;
                     _response.Result = villa;
 
-                    return CreatedAtRoute("GetVilla", new { id = id }, _response);
+                    return CreatedAtRoute("GetVilla", new { id }, _response);
                 }
                 return BadRequest("Record by Id not found.");
             }
@@ -218,6 +218,7 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
+        [Authorize(Roles = "aladin")]
         public async Task<IActionResult> UpdatePartialVilla(int id, JsonPatchDocument<VillaUpdateDTO> patchDTO)
         {
             if (patchDTO == null || id == 0) return BadRequest();
@@ -240,11 +241,11 @@ namespace MagicVillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status403Forbidden)]
-		[HttpDelete("{id:int}", Name = "DeleteVilla")]
-		[Authorize(Roles = "anubis")]
-		public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpDelete("{id:int}", Name = "DeleteVilla")]
+        [Authorize(Roles = "anubis")]
+        public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
             {
@@ -252,7 +253,7 @@ namespace MagicVillaAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSucces = true;
-                    _response.ErrorMessages = new List<string> { "Id can not be 0!)"};
+                    _response.ErrorMessages = new List<string> { "Id can not be 0!)" };
                     return BadRequest(_response);
                 }
                 var villa = await _dbVilla.GetAsync(v => v.Id == id, false);
@@ -277,5 +278,5 @@ namespace MagicVillaAPI.Controllers
             }
             return _response;
         }
-    } 
+    }
 }
