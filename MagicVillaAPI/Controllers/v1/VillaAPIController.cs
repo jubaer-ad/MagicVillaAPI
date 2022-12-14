@@ -60,16 +60,23 @@ namespace MagicVillaAPI.Controllers.v1
         [ResponseCache(CacheProfileName = "Default30")]
         //[ResponseCache(Duration = 30)]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "filterOccupency")] int? occupency)
         {
             _logger.Log("Getting all Villas", "inf");
             try
             {
-                _response.Result = await _dbVilla.GetAllAsync();
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSucces = true;
-                return Ok(_response);
-            }
+                if (occupency > 0)
+                {
+					_response.Result = await _dbVilla.GetAllAsync(v => v.Occupency == occupency);
+				}
+                else
+                {
+					_response.Result = await _dbVilla.GetAllAsync();
+				}
+				_response.StatusCode = HttpStatusCode.OK;
+				_response.IsSucces = true;
+				return Ok(_response);
+			}
             catch (Exception ex)
             {
                 _response.IsSucces = false;
