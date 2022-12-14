@@ -19,6 +19,10 @@ builder.Services.AddResponseCaching();
 builder.Services
 .AddControllers(opt =>
 {
+	opt.CacheProfiles.Add("Default30", new CacheProfile()
+	{
+		Duration = 30
+	});
     //opt.ReturnHttpNotAcceptable=true;
 })
 .AddNewtonsoftJson()
