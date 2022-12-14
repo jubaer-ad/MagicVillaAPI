@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Net;
+using System.Text.Json;
 
 namespace MagicVillaAPI.Controllers.v1
 {
@@ -60,7 +62,7 @@ namespace MagicVillaAPI.Controllers.v1
         [ResponseCache(CacheProfileName = "Default30")]
         //[ResponseCache(Duration = 30)]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "filterOccupency")] int? occupency, [FromQuery(Name = "searchName")] string? search)
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "filterOccupency")] int? occupency, [FromQuery(Name = "searchName")] string? search, int pageSize = 2, int pageNumber = 1)
         {
             _logger.Log("Getting all Villas", "inf");
             try
@@ -68,17 +70,23 @@ namespace MagicVillaAPI.Controllers.v1
                 IEnumerable<Villa> villaList;
                 if (occupency > 0)
                 {
-					villaList = await _dbVilla.GetAllAsync(v => v.Occupency == occupency);
+					villaList = await _dbVilla.GetAllAsync(v => v.Occupency == occupency, pageSize:pageSize, pageNumber:pageNumber);
 				}
                 else
                 {
-					villaList = await _dbVilla.GetAllAsync();
+					villaList = await _dbVilla.GetAllAsync(pageSize: pageSize, pageNumber: pageNumber);
 				}
                 if (!string.IsNullOrEmpty(search))
                 {
                     villaList = villaList.Where(v => v.Name.ToLower().Contains(search.ToLower()));
 
 				}
+                Pagination pagination = new()
+                {
+                    pageNumber = pageNumber,
+                    pazeSize = pageSize
+                };
+                Response.Headers.Add("Pagination-Format", System.Text.Json.JsonSerializer.Serialize(pagination));
                 _response.Result = _mapper.Map<List<VillaDTO>>(villaList);
 				_response.StatusCode = HttpStatusCode.OK;
 				_response.IsSucces = true;
