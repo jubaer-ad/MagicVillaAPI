@@ -60,19 +60,26 @@ namespace MagicVillaAPI.Controllers.v1
         [ResponseCache(CacheProfileName = "Default30")]
         //[ResponseCache(Duration = 30)]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "filterOccupency")] int? occupency)
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "filterOccupency")] int? occupency, [FromQuery(Name = "searchName")] string? search)
         {
             _logger.Log("Getting all Villas", "inf");
             try
             {
+                IEnumerable<Villa> villaList;
                 if (occupency > 0)
                 {
-					_response.Result = await _dbVilla.GetAllAsync(v => v.Occupency == occupency);
+					villaList = await _dbVilla.GetAllAsync(v => v.Occupency == occupency);
 				}
                 else
                 {
-					_response.Result = await _dbVilla.GetAllAsync();
+					villaList = await _dbVilla.GetAllAsync();
 				}
+                if (!string.IsNullOrEmpty(search))
+                {
+                    villaList = villaList.Where(v => v.Name.ToLower().Contains(search.ToLower()));
+
+				}
+                _response.Result = _mapper.Map<List<VillaDTO>>(villaList);
 				_response.StatusCode = HttpStatusCode.OK;
 				_response.IsSucces = true;
 				return Ok(_response);
