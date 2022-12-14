@@ -57,6 +57,8 @@ namespace MagicVillaAPI.Controllers.v1
         [ProducesResponseType(404)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ResponseCache(Duration = 30)]
+        //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             _logger.Log("Getting all Villas", "inf");
@@ -81,7 +83,8 @@ namespace MagicVillaAPI.Controllers.v1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> GetVilla(int id)
+		[ResponseCache(Duration = 30)]
+		public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try
             {

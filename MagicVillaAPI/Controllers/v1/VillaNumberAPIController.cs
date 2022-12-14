@@ -24,12 +24,12 @@ namespace MagicVillaAPI.Controllers.v1
         protected APIResponse _response;
         private readonly IVillaRepository _villaRepository;
 
-        public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, ILoggingCustom logger, IMapper _mapper, IVillaRepository villaRepository)
+        public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, ILoggingCustom logger, IMapper mapper, IVillaRepository villaRepository)
         {
             _dbVillaNumber = dbVillaNumber;
             _logger = logger;
             _response = new();
-            this._mapper = _mapper;
+            this._mapper = mapper;
             _villaRepository = villaRepository;
         }
 

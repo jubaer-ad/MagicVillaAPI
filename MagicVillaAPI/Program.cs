@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCustomeServices();
+builder.Services.AddResponseCaching();
 builder.Services
 .AddControllers(opt =>
 {
@@ -26,11 +27,7 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 
 
-// Adding Custom logger to container for dependency injection
-builder.Services.AddSingleton<ILoggingCustom, LoggingCustomImpl>();
-builder.Services.AddScoped<IVillaRepository, VillaRepositoryImpl>();
-builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepositoryImpl>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret") ?? "";
 builder.Services.AddAuthentication( x =>
 {
